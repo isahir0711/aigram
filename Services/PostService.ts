@@ -1,5 +1,7 @@
 import { Root } from "../models/ig";
+import { BackResponse, IgResponse } from "../models/response";
 
+//so, if this have some info about me, please dont doxx me :)
 const createHeaders = (username: string): Headers => {
     const headers = new Headers({
         'Accept': '*/*',
@@ -28,7 +30,7 @@ const createHeaders = (username: string): Headers => {
     return headers;
 };
 
-const fetchInstagramPosts = async (username: string, numberOfPosts: number = 9): Promise<string[]> => {
+const fetchInstagramPosts = async (username: string, numberOfPosts: number = 9): Promise<IgResponse> => {
     const headers = createHeaders(username);
 
     const content = new URLSearchParams({
@@ -84,7 +86,10 @@ const fetchInstagramPosts = async (username: string, numberOfPosts: number = 9):
 
     const urls: string[] = edges.map(item => item.node.image_versions2.candidates[0].url);
 
-    return urls;
+    const backres:IgResponse = {
+        urls: urls,
+    };
+    return backres;
 };
 
 export default fetchInstagramPosts;
