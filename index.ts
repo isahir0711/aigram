@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import { BackResponse } from "./models/response";
 import { z } from "zod";
 import cors from 'cors';
+import { openai } from "@ai-sdk/openai";
 
 dotenv.config()
 const app = express();
@@ -23,17 +24,9 @@ app.get("/", (req: Request, res: Response) => {
   res.status(200).send("Hello there!");
 });
 
-//Zod Schema for the request
-const ProfileAnalysisSchema = z.object({
-  description: z.string(),
-  mbti: z.string()
-});
+const model = openai('gpt-4o');
 
-const model = google('models/gemini-1.5-flash-latest');
-
-type ProfileAnalysis = z.infer<typeof ProfileAnalysisSchema>;
-
-app.get("/analisys/:username", async (req, res) => {
+app.get("/analysis/:username", async (req, res) => {
   try {
     let username = req.params.username;
 
@@ -48,15 +41,19 @@ app.get("/analisys/:username", async (req, res) => {
       ...igresponse.urls.map(url => ({ type: 'image', image: url } as ImagePart)),
     ];
 
-    const analysis  = await generateText({
+    const analysis  = await generateObject({
       model: model,
+      schema: z.object({
+        desc: z.string(),
+        mbti: z.string()
+      }),
       system: `Eres un analizador de perfiles de instagram, recibiras varias fotografias y daras una descripion profunda de la persona en base a estas, 
       retorna una descripcion de no mas de 250 caracteres y minima de 100 regresa el mbti tentativo de la persona, basado en lo que ves en las fotos
       Basate solo en lo visto en las fotos, intenta dar una descripcion lo mas precisa posible, para que parezca quee es algo mas personal
 
       Evita decir cosas que suenen genericas, como "eres una persona alegre" o "te gusta la naturaleza", intenta ser mas especifico y detallado
       
-      Da la respuesta en primera persona, hacia el usuario, es decir, "Eres, te gusta, admiras, etc..." `,
+      Da la respuesta en primera persona, hacia el usuario, es decir, "Eres, te gusta, admiras, etc..." Pero no uses tanto el "Eres" `,
       messages: [
         {
           role: 'user',
@@ -67,8 +64,8 @@ app.get("/analisys/:username", async (req, res) => {
 
     const backres: BackResponse = {
       username: username,
-      description: analysis.text,
-      mbti: 'ENTP'
+      description: analysis.object.desc,
+      mbti: analysis.object.mbti
     }
 
     res.send(backres);
