@@ -11,7 +11,7 @@ import { openai } from "@ai-sdk/openai";
 dotenv.config()
 const app = express();
 var corsOptions = {
-  origin: 'https://mbtai.vercel.app',
+  origin: process.env.CORS_ORIGIN,
   optionsSuccessStatus: 200,
 }
 
