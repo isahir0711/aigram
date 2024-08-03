@@ -10,7 +10,7 @@ import cors from 'cors';
 dotenv.config()
 const app = express();
 var corsOptions = {
-  origin: process.env.FRONTEND_URL,
+  origin: 'https://mbtai.vercel.app',
   optionsSuccessStatus: 200,
 }
 
