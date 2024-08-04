@@ -1,4 +1,4 @@
-# Análisis de Perfiles de Instagram con Express y Vercel SDK
+# Análisis de Perfiles de Instagram con Express y Vercel AI SDK
 
 Este proyecto es una aplicación web desarrollada con Express que permite analizar perfiles de Instagram utilizando el SDK de Vercel.
 
