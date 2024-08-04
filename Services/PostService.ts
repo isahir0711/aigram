@@ -1,7 +1,6 @@
 import { Root } from "../models/ig";
 import { BackResponse, IgResponse } from "../models/response";
 
-//so, if this have some info about me, please dont doxx me :)
 const createHeaders = (username: string): Headers => {
     const headers = new Headers({
         'Accept': '*/*',
