@@ -12,6 +12,7 @@ Este proyecto es una aplicación web desarrollada con Express que permite analiz
 - Node.js
 - OPENAI_API_KEY
 - Vercel AI SDK
+- RAPIDAPI_KEY for use the Ig API https://rapidapi.com/yuananf/api/instagram28
 
 ## Instalación
 
