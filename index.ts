@@ -73,10 +73,10 @@ app.get("/analysis/:username", async (req, res) => {
 
   }
   catch (error) {
-    console.error('Error fetching Instagram posts:', error);
+    console.error('Error doing the analysis:', error);
     res.status(500).json({
       success: false,
-      error: 'Error al obtener los posts de Instagram'
+      error: 'error al hacer el analisis'
     });
   }
 });

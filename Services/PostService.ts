@@ -69,26 +69,32 @@ const fetchInstagramPosts = async (username: string, numberOfPosts: number = 9):
         'doc_id': '7846480048738742'
     });
 
-    const response = await fetch('https://www.instagram.com/graphql/query', {
-        method: 'POST',
-        headers: headers,
-        body: content.toString()
-    });
-
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    try{
+        const response = await fetch('https://www.instagram.com/graphql/query', {
+            method: 'POST',
+            headers: headers,
+            body: content.toString()
+        });
+    
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    
+        const posts: Root = await response.json();
+    
+        const edges = posts.data.xdt_api__v1__feed__user_timeline_graphql_connection.edges;
+    
+        const urls: string[] = edges.map(item => item.node.image_versions2.candidates[0].url);
+    
+        const backres:IgResponse = {
+            urls: urls,
+        };
+        return backres;
     }
-
-    const posts: Root = await response.json();
-
-    const edges = posts.data.xdt_api__v1__feed__user_timeline_graphql_connection.edges;
-
-    const urls: string[] = edges.map(item => item.node.image_versions2.candidates[0].url);
-
-    const backres:IgResponse = {
-        urls: urls,
-    };
-    return backres;
+    catch (error){
+        console.log('Error fetching Instagram posts:', error);
+        throw new Error('Error fetching Instagram posts');
+    }
 };
 
 export default fetchInstagramPosts;
