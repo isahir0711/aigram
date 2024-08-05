@@ -7,6 +7,7 @@ import { BackResponse } from "./models/response";
 import { z } from "zod";
 import cors from 'cors';
 import { openai } from "@ai-sdk/openai";
+import getUserPosts from "./Services/igService";
 
 dotenv.config()
 const app = express();
@@ -30,7 +31,7 @@ app.get("/analysis/:username", async (req, res) => {
   try {
     let username = req.params.username;
 
-    const igresponse = await fetchInstagramPosts(username);
+    const igresponse = await getUserPosts(username);
 
     if(igresponse.urls.length === 0){
       return res.status(400);
